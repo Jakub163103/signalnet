@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Terms of Service</li>
+{% endblock %}
+{% block content %}
+    <section class="terms-of-service">
+        <h1>Terms of Service</h1>
+        <p>Last updated: 11/11/2024</p>
+
+        <h2>1. Introduction</h2>
+        <p>Welcome to SignalNet! These Terms of Service ("Terms") govern your access to and use of our website, services, and applications (collectively, the "Service"). By accessing or using our Service, you agree to be bound by these Terms. If you do not agree to these Terms, you may not use our Service.</p>
+
+        <h2>2. Eligibility</h2>
+        <p>By using our Service, you represent and warrant that you are at least 18 years old and have the legal capacity to enter into these Terms. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.</p>
+
+        <h2>3. Account Registration</h2>
+        <p>To access certain features of our Service, you must register for an account. You agree to:
+            <ul>
+                <li>Provide accurate and complete information during registration.</li>
+                <li>Maintain the security of your account password.</li>
+                <li>Notify us immediately of any unauthorized use of your account.</li>
+            </ul>
+        </p>
+
+        <h2>4. Use of the Service</h2>
+        <p>You agree to use the Service only for lawful purposes and in accordance with these Terms. Prohibited activities include, but are not limited to:
+            <ul>
+                <li>Violating any applicable laws or regulations.</li>
+                <li>Posting or transmitting any content that is unlawful, harmful, defamatory, or otherwise objectionable.</li>
+                <li>Attempting to interfere with the normal operation of the Service.</li>
+                <li>Unauthorized access to other users' accounts or data.</li>
+            </ul>
+        </p>
+
+        <h2>5. Subscription and Payments</h2>
+        <p>
+            <strong>Subscription Plans:</strong> SignalNet offers various subscription plans that grant you access to different levels of service. Details of each plan are available on our <a href="{{ url_for('subscribe') }}">Subscription</a> page.
+        </p>
+        <p>
+            <strong>Payment Processing:</strong> Payments for subscriptions are processed through Stripe. By subscribing, you agree to Stripe’s <a href="https://stripe.com/legal" target="_blank">Terms of Service</a> and Privacy Policy.
+        </p>
+        <p>
+            <strong>Billing:</strong> Subscription fees are billed in advance on a recurring basis. You can manage your subscription and billing information through your account settings.
+        </p>
+        <p>
+            <strong>Cancellation and Refunds:</strong> You may cancel your subscription at any time through your account settings. Refunds are subject to Stripe's refund policies and are handled according to their terms.
+        </p>
+
+        <h2>6. Intellectual Property</h2>
+        <p>
+            All content, features, and functionality of the Service, including but not limited to text, graphics, logos, icons, images, audio clips, and software, are the exclusive property of SignalNet or its licensors and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
+        </p>
+
+        <h2>7. Disclaimers and Limitation of Liability</h2>
+        <p>
+            <strong>Disclaimer of Warranties:</strong> The Service is provided on an "AS IS" and "AS AVAILABLE" basis. SignalNet disclaims all warranties of any kind, whether express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+        </p>
+        <p>
+            <strong>Limitation of Liability:</strong> In no event shall SignalNet, its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:
+            <ul>
+                <li>Your access to or use of the Service;</li>
+                <li>Any conduct or content of any third party on the Service;</li>
+                <li>Any content obtained from the Service;</li>
+                <li>Unauthorized access, use, or alteration of your transmissions or content.</li>
+            </ul>
+        </p>
+
+        <h2>8. Indemnification</h2>
+        <p>
+            You agree to defend, indemnify, and hold harmless SignalNet and its affiliates, officers, agents, and employees from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney's fees) arising from:
+            <ul>
+                <li>Your use of and access to the Service;</li>
+                <li>Your violation of any term of these Terms;</li>
+                <li>Your violation of any third-party right, including without limitation any copyright, property, or privacy right;</li>
+                <li>Any claim that your content caused damage to a third party.</li>
+            </ul>
+        </p>
+
+        <h2>9. Termination</h2>
+        <p>
+            We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including without limitation if you breach the Terms. Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service.
+        </p>
+
+        <h2>10. Governing Law</h2>
+        <p>
+            These Terms shall be governed and construed in accordance with the laws of **Poland**, without regard to its conflict of law provisions. You agree to submit to the personal and exclusive jurisdiction of the courts located in Poland.
+        </p>
+        <p>
+            Additionally, users are responsible for complying with any laws applicable to their jurisdiction.
+        </p>
+
+        <h2>11. Dispute Resolution</h2>
+        <p>
+            Any disputes arising out of or related to these Terms or the Service shall be resolved through binding arbitration in Poland, in accordance with the rules of the Polish Arbitration Act. The arbitration shall be conducted in the Polish language.
+        </p>
+
+        <h2>12. Changes to Terms</h2>
+        <p>
+            We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.
+        </p>
+        <p>
+            By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, you are no longer authorized to use the Service.
+        </p>
+
+        <h2>13. Severability</h2>
+        <p>
+            If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. The invalid or unenforceable provision will be deemed replaced by a valid, enforceable provision that most closely matches the intent of the original provision.
+        </p>
+
+        <h2>14. Entire Agreement</h2>
+        <p>
+            These Terms constitute the entire agreement between you and SignalNet regarding the use of the Service and supersede all prior agreements, understandings, or representations, whether written or oral.
+        </p>
+
+        <h2>15. Contact Us</h2>
+        <p>
+            If you have any questions about these Terms of Service, please contact us at <a href="mailto:info@signalnet.com">info@signalnet.com</a>.
+        </p>
+
+        <h2>16. Risk Disclosure</h2>
+        <p>
+            The information, signals, and analyses provided by SignalNet are intended for informational and educational purposes only and do not constitute financial, investment, trading, or legal advice. Trading financial instruments involves significant risk, including the potential loss of your entire investment. You should carefully consider whether such trading is suitable for you in light of your financial condition. Always seek the advice of a qualified financial advisor before making any financial decisions.
+        </p>
+
+        <h2>17. Privacy Policy</h2>
+        <p>
+            For more information on how we handle your data, please refer to our <a href="{{ url_for('privacy') }}">Privacy Policy</a>.
+        </p>
+    </section>
+{% endblock %} 

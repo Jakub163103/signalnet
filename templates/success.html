@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Subscription Successful{% endblock %}
+
+{% block content %}
+<section class="success-page">
+    <h2>Thank You for Subscribing!</h2>
+    <p>Your subscription was successful. You can now enjoy all the features of the {{ subscription_name }} plan.</p>
+    <a href="{{ url_for('home') }}" class="btn btn-primary">Go to Dashboard</a>
+</section>
+{% endblock %} 

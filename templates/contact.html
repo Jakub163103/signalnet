@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - SignalNet{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="/">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Contact</li>
+{% endblock %}
+
+{% block content %}
+<main>
+    <!-- Embedded CSS Styles Specific to Contact Page -->
+    <style>
+        /* Contact Header Styles */
+        .contact-header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .contact-header h2 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 6px;
+        }
+
+        .contact-header p {
+            font-size: 14px;
+            color: #555555;
+            max-width: 600px;
+            margin: 0;
+        }
+
+        /* Contact Form and Info Container */
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Contact Form Styles */
+        #contact-form {
+            background-color: #f9f9f9;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1 1 45%;
+            min-width: 280px;
+        }
+
+        #contact-form h3 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333333;
+            font-size: 13px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .subscribe-button {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .subscribe-button:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+
+        /* Contact Information Styles */
+        #contact-info {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1 1 45%;
+            min-width: 280px;
+        }
+
+        #contact-info h3 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #contact-info p {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        #contact-info a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        #contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Privacy Notice Styles */
+        #privacy {
+            background-color: #f9f9f9;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+        }
+
+        #privacy h3 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #privacy p {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        /* FAQ Section Styles */
+        #faq {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+        }
+
+        #faq h3 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .faq-item {
+            margin-bottom: 12px;
+        }
+
+        .faq-item p {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 4px;
+        }
+
+        .faq-item p strong {
+            color: #333333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .contact-container {
+                flex-direction: column;
+            }
+
+            #contact-form,
+            #contact-info {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+
+            .flash-container {
+                left: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+    <!-- End of Embedded CSS Styles -->
+
+    <section class="contact-header">
+        <h2>Contact Us</h2>
+        <p>If you have any questions or need further information, feel free to reach out to us using the form below or through our contact information.</p>
+    </section>
+
+    <section class="contact-container">
+        <!-- Contact Form -->
+        <section id="contact-form">
+            <h3>Get in Touch</h3>
+            <form action="{{ url_for('contact') }}" method="POST" novalidate>
+                {{ form.hidden_tag() }}
+                <div>
+                    <!-- Name Field -->
+                    <div class="form-group">
+                        <label for="{{ form.name.id }}">Name</label>
+                        {{ form.name(class="input-field", placeholder="Your Name") }}
+                        {% for error in form.name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="{{ form.email.id }}">Email</label>
+                        {{ form.email(class="input-field", placeholder="Your Email") }}
+                        {% for error in form.email.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Subject Field -->
+                    <div class="form-group">
+                        <label for="{{ form.subject.id }}">Subject</label>
+                        {{ form.subject(class="input-field", placeholder="Subject") }}
+                        {% for error in form.subject.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Message Field -->
+                    <div class="form-group">
+                        <label for="{{ form.message.id }}">Message</label>
+                        {{ form.message(class="input-field", placeholder="Your Message") }}
+                        {% for error in form.message.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Submit Button -->
+                    {{ form.submit(class="subscribe-button") }}
+                </div>
+            </form>
+        </section>
+
+        <!-- Contact Information -->
+        <section id="contact-info">
+            <h3>Our Contact Information</h3>
+            <p>Email: <a href="mailto:info@signalnet.com">info@signalnet.com</a></p>
+            <p>Phone: <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+            <p>Address: 123 Financial Ave, Suite 100, New York, NY 10001, USA</p>
+        </section>
+    </section>
+
+    <!-- Privacy Notice -->
+    <section id="privacy">
+        <h3>Privacy Notice</h3>
+        <p>Your privacy is important to us. Please read our <a href="/privacy">Privacy Policy</a> to understand how we handle your personal information.</p>
+    </section>
+
+    <!-- Frequently Asked Questions -->
+    <section id="faq">
+        <h3>Frequently Asked Questions</h3>
+        <div class="faq-item">
+            <p><strong>What services do you offer?</strong></p>
+            <p>We provide top-notch financial market signals to help you make informed decisions.</p>
+        </div>
+        <!-- Add more FAQs as needed -->
+    </section>
+</main>
+
+<!-- JavaScript for Flash Message Close Functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const closeButtons = document.querySelectorAll('.flash .close');
+        closeButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const flashMessage = this.parentElement;
+                flashMessage.classList.add('hide-flash');
+                setTimeout(() => {
+                    flashMessage.remove();
+                }, 500);
+            });
+        });
+    });
+</script>
+{% endblock %}

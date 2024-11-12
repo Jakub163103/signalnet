@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - SignalNet{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Notifications</li>
+{% endblock %}
+
+{% block content %}
+<h2>Notifications</h2>
+
+<div class="notifications-container">
+    {% if notifications %}
+        <ul class="notifications-list">
+            {% for notification in notifications %}
+                <li class="notification-item {% if not notification.read %}unread{% endif %}" onclick="toggleMessage(this)" data-timestamp="{{ notification.timestamp.isoformat() }}">
+                    <div class="notification-content">
+                        <p class="notification-topic">
+                            {{ notification.message.split(':', 1)[0] }}
+                        </p>
+                        <div class="notification-message" style="display: none;">
+                            {% if ':' in notification.message %}
+                                <p>{{ notification.message.split(':', 1)[1] | nl2br }}</p>
+                            {% else %}
+                                <p>{{ notification.message | nl2br }}</p>
+                            {% endif %}
+                        </div>
+                        <small class="timestamp">
+                            Sent by {{ notification.sender.username }} on <span class="local-time"></span>
+                        </small>
+                    </div>
+                    <div class="notification-actions">
+                        {% if not notification.read %}
+                            <form action="{{ url_for('mark_notification_read', notification_id=notification.id) }}" method="POST" style="display:inline;">
+                                {{ form.hidden_tag() }}
+                                <button type="submit" class="icon-button btn-success" aria-label="Mark notification as read">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </form>
+                        {% endif %}
+                        <form action="{{ url_for('delete_notification', notification_id=notification.id) }}" method="POST" style="display:inline;">
+                            {{ form.hidden_tag() }}
+                            <button type="submit" class="icon-button btn-danger" aria-label="Delete notification">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="bulk-actions">
+            <form action="{{ url_for('mark_all_read') }}" method="POST" style="display:inline;">
+                {{ form.hidden_tag() }}
+                <button type="submit" class="btn btn-primary bulk-action-button" aria-label="Mark all notifications as read">Mark All as Read</button>
+            </form>
+            <form action="{{ url_for('delete_all_notifications') }}" method="POST" style="display:inline;">
+                {{ form.hidden_tag() }}
+                <button type="submit" class="btn btn-danger bulk-action-button" aria-label="Delete all notifications">Delete All Notifications</button>
+            </form>
+        </div>
+    {% else %}
+        <p>You have no notifications at this time.</p>
+    {% endif %}
+</div>
+
+<hr>
+
+<div class="notification-info">
+    <h3>About Notifications</h3>
+    <p>Notifications keep you informed about important updates, alerts, and messages related to your subscription and account activities. Stay updated with the latest signals, account changes, and service announcements to make the most of your SignalNet experience.</p>
+</div>
+
+<style>
+    .notifications-container {
+        margin-top: 20px;
+    }
+
+    .notifications-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .notification-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    .notification-item.unread {
+        background-color: #f0f8ff;
+    }
+
+    .notification-content .notification-topic {
+        margin: 0 0 5px 0;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .notification-content .notification-message p {
+        margin: 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .notification-content .timestamp {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .notification-actions {
+        display: flex;
+        gap: 5px;
+    }
+
+    .icon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .icon-button.btn-success {
+        background-color: #28a745;
+    }
+
+    .icon-button.btn-success:hover {
+        background-color: #218838;
+    }
+
+    .icon-button.btn-danger {
+        background-color: #dc3545;
+    }
+
+    .icon-button.btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .bulk-actions {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .bulk-action-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .bulk-action-button.btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .bulk-action-button.btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .bulk-action-button.btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .bulk-action-button.btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .notification-info {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        .notification-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .notification-actions {
+            margin-top: 10px;
+        }
+
+        .bulk-actions {
+            flex-direction: column;
+            gap: 5px;
+        }
+    }
+</style>
+
+<script>
+    function toggleMessage(element) {
+        const messageDiv = element.querySelector('.notification-message');
+        if (messageDiv.style.display === "none") {
+            messageDiv.style.display = "block";
+        } else {
+            messageDiv.style.display = "none";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationItems = document.querySelectorAll('.notification-item');
+        notificationItems.forEach(item => {
+            const timestamp = item.getAttribute('data-timestamp');
+            const localTimeElement = item.querySelector('.local-time');
+            if (timestamp && localTimeElement) {
+                const localTime = new Date(timestamp).toLocaleString();
+                localTimeElement.textContent = localTime;
+            }
+        });
+    });
+</script>
+
+{% endblock %} 

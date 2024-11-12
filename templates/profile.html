@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Profile</li>
+{% endblock %}
+{% block content %}
+<section class="profile-section">
+    <h2>Your Profile</h2>
+    <div class="profile-container">
+        <div class="profile-picture-container">
+            <label for="profile_picture" class="profile-picture-label" aria-label="Change Profile Picture">
+                <img src="{{ url_for('static', filename=current_user.profile_picture if current_user.profile_picture else 'uploads/default.png') }}" alt="Profile Picture" class="profile-picture">
+                <div class="edit-icon-overlay" aria-hidden="true">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </label>
+            <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" id="profile-form">
+                {{ form.hidden_tag() }}
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*" aria-label="Upload Profile Picture" style="display: none;" onchange="document.getElementById('profile-form').submit();">
+            </form>
+        </div>
+        <div class="user-details">
+            <p><strong>Username:</strong> {{ current_user.username }}</p>
+            <p><strong>Email:</strong> {{ current_user.email }}</p>
+            <p><strong>Subscription Plan:</strong> {{ current_user.subscription.name if current_user.subscription else 'None' }}</p>
+            <p><strong>Signals Used Today:</strong> {{ current_user.signals_used if current_user.signals_used is not none else 0 }}/5</p>
+            {% if current_user.signals_used is not none and current_user.signals_used >= 4 %}
+                <p class="warning">You are close to reaching your daily signal limit.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="profile-actions">
+        <!-- Cancel Subscription Form -->
+        {% if current_user.subscription %}
+        <form method="POST" action="{{ url_for('cancel_subscription') }}" class="action-form" aria-label="Cancel Subscription">
+            {{ form.hidden_tag() }}
+            <button type="submit" name="cancel_subscription" class="cancel-button" onclick="return confirm('Are you sure you want to cancel your subscription?');">Cancel Subscription</button>
+        </form>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

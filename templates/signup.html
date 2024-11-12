@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Sign Up</li>
+{% endblock %}
+{% block content %}
+    <section class="auth-form">
+        <form method="POST" action="{{ url_for('signup') }}">
+            {{ form.hidden_tag() }} <!-- Includes CSRF token and hidden fields -->
+
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control", id="username") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control", id="email") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control", id="password") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.confirm_password.label(class="form-label") }}
+                {{ form.confirm_password(class="form-control", id="confirm_password") }}
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country: <span style="color: red;">*</span></label>
+                <select name="country" id="country" class="form-control" required>
+                    {% for country in countries %}
+                        <option value="{{ country.code }}">{{ country.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Additional Agreements -->
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="tos" name="tos" required>
+                <label class="form-check-label" for="tos">
+                    I have read and agree to the <a href="{{ url_for('terms') }}">Terms of Service</a>.
+                </label> <span style="color: red;">*</span>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="privacy_policy" name="privacy_policy" required>
+                <label class="form-check-label" for="privacy_policy">
+                    I have read and agree to the <a href="{{ url_for('privacy') }}">Privacy Policy</a>.
+                </label> <span style="color: red;">*</span>
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="cookie_policy" name="cookie_policy" required>
+                <label class="form-check-label" for="cookie_policy">
+                    I have read and agree to the <a href="{{ url_for('cookie_policy') }}">Cookie Policy</a>.
+                </label> <span style="color: red;">*</span>
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="communications" name="communications">
+                <label class="form-check-label" for="communications">
+                    I agree to receive communications from SignalNet.
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+        </form>
+    </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function(event) {
+            if (password.value !== confirmPassword.value) {
+                event.preventDefault();
+                alert('Passwords do not match!');
+            }
+        });
+    });
+    </script>
+{% endblock %}

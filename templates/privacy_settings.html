@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Settings - SignalNet{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Privacy Settings</li>
+{% endblock %}
+
+{% block content %}
+<h2>Privacy Settings</h2>
+
+<form action="{{ url_for('privacy_settings') }}" method="POST">
+    {{ form.hidden_tag() }}
+    
+    <!-- Notification Preferences -->
+    <fieldset>
+        <legend>Notification Preferences</legend>
+        
+        <div class="form-group form-check">
+            {{ form.email_notifications(class="form-check-input", id="email_notifications") }}
+            <label class="form-check-label" for="email_notifications">
+                {{ form.email_notifications.label.text }}
+            </label>
+        </div>
+        
+        <div class="form-group form-check">
+            {{ form.sms_notifications(class="form-check-input", id="sms_notifications") }}
+            <label class="form-check-label" for="sms_notifications">
+                {{ form.sms_notifications.label.text }}
+            </label>
+        </div>
+        
+        <div class="form-group form-check">
+            {{ form.in_app_notifications(class="form-check-input", id="in_app_notifications") }}
+            <label class="form-check-label" for="in_app_notifications">
+                {{ form.in_app_notifications.label.text }}
+            </label>
+        </div>
+    </fieldset>
+    
+    <hr>
+    
+    <!-- Privacy Settings -->
+    <fieldset>
+        <legend>Privacy Settings</legend>
+        
+        <div class="form-group form-check">
+            {{ form.allow_marketing_emails(class="form-check-input", id="allow_marketing_emails") }}
+            <label class="form-check-label" for="allow_marketing_emails">
+                {{ form.allow_marketing_emails.label.text }}
+            </label>
+        </div>
+        
+        <div class="form-group form-check">
+            {{ form.share_data_with_partners(class="form-check-input", id="share_data_with_partners") }}
+            <label class="form-check-label" for="share_data_with_partners">
+                {{ form.share_data_with_partners.label.text }}
+            </label>
+        </div>
+        
+        <div class="form-group form-check">
+            {{ form.allow_profile_visibility(class="form-check-input", id="allow_profile_visibility") }}
+            <label class="form-check-label" for="allow_profile_visibility">
+                {{ form.allow_profile_visibility.label.text }}
+            </label>
+        </div>
+    </fieldset>
+    
+    <button type="submit" class="btn btn-primary">Save Preferences</button>
+</form>
+
+<style>
+    .notifications-container {
+        margin-top: 20px;
+    }
+
+    form {
+        max-width: 600px;
+    }
+
+    fieldset {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    legend {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        form {
+            width: 100%;
+            padding: 0;
+        }
+    }
+</style>
+
+{% endblock %} 

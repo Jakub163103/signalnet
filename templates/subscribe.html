@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block title %}Subscribe - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Subscribe</li>
+{% endblock %}
+{% block content %}
+    <!-- Flash Messages are handled in base.html -->
+
+    <!-- Scoped Styles for Subscribe Page -->
+    <style>
+        /* Subscribe Page Container */
+        .subscribe-page {
+            font-family: 'Silkscreen', sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 20px;
+        }
+        
+        /* Professional Info Section */
+        .subscribe-page .professional-info {
+            background-color: #f0f4f8;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+        
+        .subscribe-page .professional-info h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        
+        .subscribe-page .professional-info p {
+            font-size: 18px;
+            color: #555555;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Features Section */
+        .subscribe-page .features {
+            background-color: #ffffff;
+            padding: 40px 20px;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+        
+        .subscribe-page .features h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #333333;
+        }
+        
+        .subscribe-page .features-list {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 0;
+        }
+        
+        .subscribe-page .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #555555;
+            max-width: 800px;
+            text-align: left;
+        }
+        
+        .subscribe-page .features-list li i {
+            margin-right: 10px;
+            color: #28a745;
+        }
+        
+        /* Security Section */
+        .subscribe-page .security {
+            background-color: #f0f4f8;
+            padding: 40px 20px;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+        
+        .subscribe-page .security h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        
+        .subscribe-page .security p {
+            font-size: 18px;
+            color: #555555;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+        
+        .subscribe-page .security ul {
+            list-style: disc inside;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        .subscribe-page .security ul li {
+            font-size: 18px;
+            color: #555555;
+            margin-bottom: 10px;
+        }
+        
+        /* Legal Section */
+        .subscribe-page .legal {
+            background-color: #ffffff;
+            padding: 40px 20px;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+        
+        .subscribe-page .legal h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        
+        .subscribe-page .legal p {
+            font-size: 18px;
+            color: #555555;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+        
+        .subscribe-page .legal ul {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .subscribe-page .legal ul li {
+            margin-bottom: 10px;
+        }
+        
+        .subscribe-page .legal ul li a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .subscribe-page .legal ul li a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Testimonials Section */
+        .subscribe-page .testimonials {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 5px;
+        }
+        
+        .subscribe-page .testimonials h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .subscribe-page .testimonial {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .subscribe-page .testimonial span {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* Call-to-Action Section */
+        .subscribe-page .call-to-action {
+            background-color: #f0f4f8;
+            padding: 60px 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .subscribe-page .call-to-action h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        
+        .subscribe-page .call-to-action p {
+            font-size: 20px;
+            color: #555555;
+            margin-bottom: 30px;
+        }
+        
+        .subscribe-page .call-to-action .cta-button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .subscribe-page .call-to-action .cta-button:hover {
+            background-color: #218838;
+        }
+        
+        /* Responsive Styles for Subscribe Page */
+        @media (max-width: 768px) {
+            .subscribe-page .features-list {
+                align-items: flex-start;
+            }
+        
+            .subscribe-page .features-list li {
+                max-width: 100%;
+            }
+        
+            .subscribe-page .security ul {
+                padding-left: 20px;
+            }
+        }
+    </style>
+
+    <!-- Subscribe Page Content Wrapped in Unique Container -->
+    <div class="subscribe-page">
+        <section>
+            <h2>Choose Your Plan</h2>
+            <form method="POST" id="subscribe-form">
+                {{ form.hidden_tag() }}
+                <div class="plans">
+                    {% for subscription in subscriptions %}
+                    <div class="plan {% if current_user.subscription_id == subscription.id %}current-plan{% endif %} {% if subscription.name == 'Pro' %}most-popular{% endif %}">
+                        <h3>
+                            {{ subscription.name }}
+                            {% if subscription.name == 'Pro' %}
+                                <span class="best-value-text">Best Value</span>
+                            {% endif %}
+                        </h3>
+                        <p class="price">
+                            {% if subscription.name == 'Pro' %}
+                                <span class="original-price">$29.99</span> ${{ subscription.price }}/month
+                            {% else %}
+                                ${{ subscription.price }}/month
+                            {% endif %}
+                        </p>
+                        <ul>
+                            {% for feature in subscription.features.split(',') %}
+                            <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% if current_user.subscription_id == subscription.id %}
+                            <button type="button" class="subscribe-button current-plan-button" disabled>
+                                Current Plan
+                            </button>
+                        {% else %}
+                            <button type="submit" class="subscribe-button subscribe-button-{{ subscription.id }}" name="subscription" value="{{ subscription.name }}">
+                                Subscribe
+                            </button>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="loading" style="display:none;">
+                    <p>Processing your subscription...</p>
+                </div>
+            </form>
+        </section>
+
+        <!-- New Professional Information Sections Below Subscription Plans -->
+
+        <section class="professional-info">
+            <h2>Why Choose SignalNet?</h2>
+            <p>At SignalNet, we are committed to providing top-tier trading signals and market analysis to empower your investment decisions. Our subscription plans are designed to cater to both novice and professional traders, ensuring you have the tools and insights needed to succeed in the dynamic world of trading.</p>
+        </section>
+
+        <section class="features">
+            <h2>Our Features</h2>
+            <ul class="features-list">
+                <li><i class="fas fa-check-circle"></i>Real-Time Signals: Stay ahead with up-to-the-minute trading signals.</li>
+                <li><i class="fas fa-check-circle"></i>Comprehensive Analysis: Detailed trend analyses and moving averages to guide your strategies.</li>
+                <li><i class="fas fa-check-circle"></i>Secure Transactions: Your data and payments are protected with industry-standard security protocols.</li>
+                <li><i class="fas fa-check-circle"></i>24/7 Support: Our dedicated support team is available around the clock to assist you.</li>
+                <li><i class="fas fa-check-circle"></i>Flexible Plans: Choose a subscription that aligns with your trading frequency and investment goals.</li>
+            </ul>
+        </section>
+
+        <section class="security">
+            <h2>Security You Can Trust</h2>
+            <p>Your security is paramount to us. SignalNet employs robust security measures to safeguard your personal information and financial transactions:</p>
+            <ul>
+                <li><strong>Data Encryption:</strong> All sensitive data is encrypted using advanced encryption standards to prevent unauthorized access.</li>
+                <li><strong>Secure Payment Gateways:</strong> We integrate with trusted payment providers, ensuring your financial information is handled securely.</li>
+                <li><strong>Regular Security Audits:</strong> Continuous monitoring and regular security audits help us identify and mitigate potential vulnerabilities.</li>
+                <li><strong>Compliance:</strong> We adhere to all relevant industry standards and regulations to maintain the highest level of security.</li>
+            </ul>
+        </section>
+
+        <section class="legal">
+            <h2>Terms and Conditions</h2>
+            <p>By subscribing to SignalNet, you agree to our comprehensive terms and conditions. Please read them carefully to understand your rights and obligations:</p>
+            <ul>
+                <li><a href="{{ url_for('terms') }}">Read our Terms of Service</a></li>
+                <li><a href="{{ url_for('privacy') }}">Review our Privacy Policy</a></li>
+                <li><a href="{{ url_for('cookie_policy') }}">Understand our Cookie Policy</a></li>
+            </ul>
+            <p>Ensure you fully comprehend all terms before proceeding with your subscription to make informed decisions.</p>
+        </section>
+
+        <section class="testimonials">
+            <h2>What Our Subscribers Say</h2>
+            <div class="testimonial">
+                "SignalNet has transformed my trading strategy. The real-time signals are incredibly accurate and have significantly boosted my trading performance."
+                <span>- Alex T., Professional Trader</span>
+            </div>
+            <div class="testimonial">
+                "The comprehensive analysis and 24/7 support make SignalNet a reliable partner in my trading journey."
+                <span>- Maria K., Investment Analyst</span>
+            </div>
+        </section>
+
+        <section class="call-to-action">
+            <h2>Ready to Elevate Your Trading?</h2>
+            <p>Join thousands of satisfied traders who trust SignalNet for reliable market insights and signals.</p>
+            <a href="{{ url_for('subscribe') }}" class="cta-button">Choose Your Plan Now</a>
+        </section>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script> <!-- Ensure Stripe.js is loaded -->
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stripe = Stripe('{{ stripe_public_key }}'); // Use the passed Stripe publishable key
+
+        const subscribeForm = document.getElementById('subscribe-form');
+
+        subscribeForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Use the submitter property to identify which button was clicked
+            const submitter = e.submitter;
+            const selectedPlan = submitter.value;
+
+            // Show loading indicator
+            document.getElementById('loading').style.display = 'block';
+
+            fetch('/create-checkout-session', { // Use the new backend endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() }}' // Ensure CSRF token is included
+                },
+                body: JSON.stringify({ subscription: selectedPlan })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                if (session.error) {
+                    throw new Error(session.error);
+                }
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                if (result.error) {
+                    // Inform the user if there was an error
+                    alert(result.error.message);
+                    document.getElementById('loading').style.display = 'none';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+                document.getElementById('loading').style.display = 'none';
+            });
+        });
+    });
+    </script>
+{% endblock %} 

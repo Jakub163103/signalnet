@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Home</li>
+{% endblock %}
+{% block content %}
+    <div id="home-page">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>Welcome to SignalNet</h2>
+            <p>Your trusted source for real-time financial market signals.</p>
+            <a href="{{ url_for('subscribe') }}" class="cta-button">Get Started</a>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2>Why Choose SignalNet?</h2>
+            <ul class="features-list">
+                <li><i class="fas fa-bullhorn"></i> Make informed trading decisions instantly with real-time market signals.</li>
+                <li><i class="fas fa-chart-line"></i> Comprehensive market analysis to stay ahead of trends.</li>
+                <li><i class="fas fa-bell"></i> Customizable alerts tailored to your trading preferences.</li>
+                <li><i class="fas fa-users"></i> Expert support available 24/7 to assist you.</li>
+            </ul>
+        </section>
+        <!-- Subscription Plans Section -->
+        <section class="subscription-plans">
+            <h2>Our Subscription Plans</h2>
+            <form method="POST" action="{{ url_for('subscribe') }}" id="home-subscribe-form">
+                {{ form.hidden_tag() }}
+                <div class="plans">
+                    {% for subscription in subscriptions %}
+                        <div class="plan {% if user and user.subscription_id == subscription.id %}current-plan{% endif %} {% if subscription.name == 'Pro' %}most-popular{% endif %}">
+                            <h3>
+                                {{ subscription.name }}
+                                {% if subscription.name == 'Pro' %}
+                                    <span class="best-value-text">Best Value</span>
+                                {% endif %}
+                            </h3>
+                            <p class="price">
+                                {% if subscription.name == 'Pro' %}
+                                    <span class="original-price">$29.99</span> ${{ subscription.price }}/month
+                                {% else %}
+                                    ${{ subscription.price }}/month
+                                {% endif %}
+                            </p>
+                            <ul class="features-list">
+                                {% for feature in subscription.features.split(',') %}
+                                    <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% if user and user.subscription_id == subscription.id %}
+                                <button type="button" class="subscribe-button current-plan-button" disabled>
+                                    Current Plan
+                                </button>
+                            {% else %}
+                                <button type="submit" class="subscribe-button subscribe-button-{{ subscription.id }}" name="subscription" value="{{ subscription.name }}">
+                                    Subscribe
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div id="home-loading" style="display:none;">
+                    <p>Processing your subscription...</p>
+                </div>
+            </form>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="call-to-action">
+            <h2>Ready to Elevate Your Trading?</h2>
+            <p>Join thousands of traders who trust SignalNet for accurate and timely market signals.</p>
+            <a href="{{ url_for('subscribe') }}" class="cta-button">Subscribe Now</a>
+        </section>
+    </div>
+
+    <!-- Include Stripe.js if necessary for homepage subscriptions -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stripe = Stripe('{{ stripe_public_key }}'); // Ensure Stripe public key is available
+
+        const subscribeForm = document.getElementById('home-subscribe-form');
+
+        subscribeForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            const submitter = e.submitter;
+            const selectedPlan = submitter.value;
+
+            // Show loading indicator
+            document.getElementById('home-loading').style.display = 'block';
+
+            fetch('/create-checkout-session', { // Use the backend endpoint for checkout
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() }}' // Ensure CSRF token is included
+                },
+                body: JSON.stringify({ subscription: selectedPlan })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                if (session.error) {
+                    throw new Error(session.error);
+                }
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                if (result.error) {
+                    // Inform the user if there was an error
+                    alert(result.error.message);
+                    document.getElementById('home-loading').style.display = 'none';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+                document.getElementById('home-loading').style.display = 'none';
+            });
+        });
+    });
+    </script>
+{% endblock %}

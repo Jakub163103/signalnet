@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Quick Signal - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Quick Signal</li>
+{% endblock %}
+{% block content %}
+    <p>Model: {{ model_name }}</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="flash {{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <section>
+        <p>Signals: {{ signal_count }}</p>
+        {% if remaining_time_seconds %}
+            <p>Time until reset: <span id="remaining-time">{{ remaining_time_seconds }}</span></p>
+        {% endif %}
+    </section>
+    <section>
+        <h2>Select a Symbol</h2>
+        <ul>
+            <li>
+                <a href="{{ url_for('quick_signal', symbol='btcusdt') }}" class="symbol-link {% if selected_pair == 'btcusdt' %}active{% endif %}">
+                    BTCUSDT
+                    {% if selected_pair == 'btcusdt' %}
+                        <i class="fab fa-bitcoin"></i>
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('quick_signal', symbol='ethusdt') }}" class="symbol-link {% if selected_pair == 'ethusdt' %}active{% endif %}">
+                    ETHUSDT
+                    {% if selected_pair == 'ethusdt' %}
+                        <i class="fab fa-ethereum"></i>
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('quick_signal', symbol='solusdt') }}" class="symbol-link {% if selected_pair == 'solusdt' %}active{% endif %}">
+                    SOLUSDT
+                    {% if selected_pair == 'solusdt' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M23.876 18.031l-3.962 4.14a.9.9 0 0 1-.306.21a.9.9 0 0 1-.367.074H.46a.47.47 0 0 1-.252-.073a.45.45 0 0 1-.17-.196a.44.44 0 0 1-.031-.255a.44.44 0 0 1 .117-.23l3.965-4.139a.9.9 0 0 1 .305-.21a.9.9 0 0 1 .366-.075h18.78a.47.47 0 0 1 .252.074a.45.45 0 0 1 .17.196a.44.44 0 0 1 .031.255a.44.44 0 0 1-.117.23m-3.962-8.335a.9.9 0 0 0-.306-.21a.9.9 0 0 0-.367-.075H.46a.47.47 0 0 0-.252.073a.45.45 0 0 0-.17.197a.44.44 0 0 0-.031.254a.44.44 0 0 0 .117.23l3.965 4.14a.9.9 0 0 0 .305.21a.9.9 0 0 0 .366.074h18.78a.47.47 0 0 0 .252-.073a.45.45 0 0 0 .17-.196a.44.44 0 0 0 .031-.255a.44.44 0 0 0-.117-.23z"/>
+                        </svg>
+                    {% endif %}
+                </a>
+            </li>
+        </ul>
+    </section>
+    {% if selected_pair %}
+    <section>
+        <p>Current Price: <span id="price">Loading...</span></p>
+        <p>Signal: <span id="signal">Calculating...</span></p>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Connected to SocketIO server');
+        });
+
+        socket.on('new_signal', (data) => {
+            document.getElementById('price').innerText = data.price;
+            document.getElementById('signal').innerText = data.signal;
+            console.log(`New Signal: ${data.signal} at ${data.price} on ${data.timestamp}`);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from SocketIO server');
+        });
+
+        // Countdown Timer
+        let remainingTime = {{ remaining_time_seconds | tojson | safe }};
+        const remainingTimeElement = document.getElementById('remaining-time');
+
+        if (remainingTimeElement) {
+            const updateTimer = () => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    const hours = Math.floor(remainingTime / 3600);
+                    const minutes = Math.floor((remainingTime % 3600) / 60);
+                    const seconds = remainingTime % 60;
+                    remainingTimeElement.innerText = `${hours}h ${minutes}m ${seconds}s`;
+                }
+            };
+            setInterval(updateTimer, 1000);
+        }
+    </script>
+    {% endif %}
+    <form method="POST">
+        <button type="submit" class="generate-signal-button">Generate Signal</button>
+    </form>
+{% endblock %}

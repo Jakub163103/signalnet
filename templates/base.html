@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SignalNet - Real-Time Financial Market Signals</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Existing styles */
+
+        /* Flash message styles */
+        .flash-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            max-width: 300px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .flash {
+            cursor: pointer;
+            position: relative;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: scale(1);
+        }
+
+        .flash.success {
+            background-color: #28a745;
+        }
+
+        .flash.warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .flash.danger {
+            background-color: #dc3545;
+        }
+
+        .flash.info {
+            background-color: #17a2b8;
+        }
+
+        .flash.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        /* Shrinking line animation */
+        .flash::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.7);
+            animation: shrink 5s linear forwards;
+            animation-play-state: running;
+        }
+
+        @keyframes shrink {
+            from { width: 100%; }
+            to { width: 0; }
+        }
+        .flash:hover {
+            scale: 1.05;
+        }
+        /* Hover effect to pause the shrinking line */
+        .flash:hover::after {
+            animation-play-state: paused;
+        }
+
+        /* Dropdown Styling */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .subscription-plan {
+            font-size: 16px;
+            color: #555;
+            margin-left: 5px;
+            position: relative;
+            top: 25px;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 90px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+            margin-bottom: 0px;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            gap: 15px; /* Space between the bell and the user icon */
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid #28a745;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification-bell {
+            position: relative;
+            color: #333;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 8px;
+            height: 8px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .user-icon:hover {
+            opacity: 0.8;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            flex: 1;
+            margin-right: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer-section.payment {
+            margin-top: 20px;
+        }
+
+        .footer-section.payment p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .notification-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: red;
+            border-radius: 50%;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background-color: red;
+            border-radius: 50%;
+            margin-top: -2px; /* Adjust to position the dot correctly */
+            margin-right: -2px; /* Adjust to position the dot correctly */
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="/" style="text-decoration: none; color: inherit;">SignalNet</a>
+            {% if user and user.subscription and 'user_logged_in' in session %}
+                <span class="subscription-plan">({{ user.subscription.name }} Plan)</span>
+            {% endif %}
+        </h1>
+        <div class="user-menu">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('notifications') }}" class="notification-bell position-relative" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    {% if unread_notifications_count > 0 %}
+                        <span class="notification-dot"></span>
+                    {% endif %}
+                </a>
+                <img 
+                    src="{{ url_for('static', filename=current_user.profile_picture if current_user.profile_picture else 'uploads/default.png') }}" 
+                    alt="User Icon" 
+                    class="user-icon"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    tabindex="0"
+                >
+                <div id="dropdown" class="dropdown-content">
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                    <a href="{{ url_for('account_settings') }}">Account Settings</a>
+                    <a href="{{ url_for('privacy_settings') }}">Privacy Settings</a>
+                    <a href="{{ url_for('help_center') }}">Help Center</a>
+                    {% if current_user.username == 'Admin' %}
+                        <a href="{{ url_for('admin_send_notification') }}">Admin Notifications</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn btn-secondary">Sign Up</a>
+            {% endif %}
+        </div>
+    </header>
+    <nav>
+        <a href="/about" class="{% if request.path == '/about' %}active{% endif %}" aria-label="About">About</a> |
+        <a href="/services" class="{% if request.path.startswith('/services') %}active{% endif %}" aria-label="Services">Services</a> |
+        <a href="/metrics" class="{% if request.path == '/markets' %}active{% endif %}" aria-label="Metrics">Metrics</a> |
+        <a href="/subscribe" class="{% if request.path == '/subscribe' %}active{% endif %}" aria-label="Subscribe">Subscribe</a> |
+        <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}" aria-label="Contact">Contact</a>
+    </nav>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+            {% block breadcrumbs %}{% endblock %}
+        </ol>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userIcon = document.querySelector('.user-menu .user-icon');
+            const dropdown = document.querySelector('.user-menu .dropdown-content');
+
+            if (userIcon) {
+                userIcon.addEventListener('click', function(event) {
+                    dropdown.classList.toggle('show');
+                });
+
+                // Close the dropdown if the user clicks outside of it
+                window.addEventListener('click', function(event) {
+                    if (!event.target.matches('.user-icon')) {
+                        if (dropdown.classList.contains('show')) {
+                            dropdown.classList.remove('show');
+                        }
+                    }
+                });
+            }
+        });
+
+        // Existing flash message and other scripts...
+        // Remove flash message after line animation ends
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash');
+            const flashContainer = document.querySelector('.flash-container');
+
+            flashMessages.forEach(flash => {
+                // Comment out the animationend event listener to see if the messages appear
+                // flash.addEventListener('animationend', function() {
+                //     flash.style.display = 'none';
+                //     if (Array.from(flashMessages).every(msg => msg.style.display === 'none')) {
+                //         flashContainer.remove();
+                //     }
+                // });
+            });
+        });
+
+        // Additional existing scripts...
+    </script>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>About SignalNet</h3>
+                <p>SignalNet provides reliable financial market signals to help you make informed decisions.</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('services') }}">Services</a></li>
+                    <li><a href="{{ url_for('subscribe') }}">Subscribe</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    <li><a href="{{ url_for('privacy') }}">Privacy Policy</a></li>
+                    <li><a href="{{ url_for('services') }}">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>Email: <a href="mailto:info@signalnet.com">info@signalnet.com</a></p>
+                <p>Phone: +1 234 567 890</p>
+            </div>
+            <div class="footer-section social">
+                <h3>Follow Us</h3>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <div class="footer-section payment">
+                <h3>Payment Methods</h3>
+                <p>We use <strong>Stripe</strong> for secure payment processing.</p>
+                <a href="https://stripe.com" target="_blank">
+                    <i class="fab fa-stripe fa-2x"></i>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2023 SignalNet | All Rights Reserved
+        </div>
+    </footer>
+    <!-- Flash Messages Container -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <!-- Include JavaScript at the end of the body -->
+    <script src="{{ url_for('static', filename='js/flash.js') }}"></script>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="cookie-banner">
+        <p>
+            We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept All," you consent to our use of cookies.
+            You can also manage your preferences.
+        </p>
+        <button id="accept-all" class="cookie-button">Accept All</button>
+        <button id="manage-cookies" class="cookie-button">Manage Preferences</button>
+    </div>
+
+    <!-- Cookie Preferences Modal -->
+    <div id="cookie-modal" class="cookie-modal" aria-hidden="true" role="dialog" aria-labelledby="cookie-modal-title">
+        <div class="cookie-modal-content">
+            <span class="close-button" aria-label="Close">&times;</span>
+            <h2 id="cookie-modal-title">Cookie Preferences</h2>
+            <form id="cookie-form" class="cookie-form">
+                <label>
+                    <input type="checkbox" name="essential" disabled checked>
+                    <strong>Essential Cookies</strong> (Always Active)
+                </label>
+                <label>
+                    <input type="checkbox" name="analytics">
+                    <strong>Performance and Analytics Cookies</strong>
+                </label>
+                <label>
+                    <input type="checkbox" name="functional">
+                    <strong>Functional Cookies</strong>
+                </label>
+                <label>
+                    <input type="checkbox" name="advertising">
+                    <strong>Advertising and Targeting Cookies</strong>
+                </label>
+                <div class="button-container">
+                    <button type="submit" class="save-button">Save Preferences</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/cookie-consent.js') }}"></script>
+</body>
+</html> 

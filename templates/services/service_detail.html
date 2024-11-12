@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.name }} - SignalNet{% endblock %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+{% endblock %}
+{% block content %}
+    <section>
+        <h2>{{ service.name }}</h2>
+        <p>{{ service.description }}</p>
+        <h3>Features:</h3>
+        <ul>
+            {% for feature in service.features %}
+                <li>{{ feature }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('subscribe') }}" class="submit-button">Subscribe to {{ service.name }}</a>
+    </section>
+{% endblock %} 
