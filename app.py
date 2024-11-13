@@ -49,15 +49,11 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'Dewgwr432423423')  # Default for development
 app.config['SESSION_PERMANENT'] = False
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # Adjust as needed
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('POSTGRESQL_DATABASE_URI')
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 csrf = CSRFProtect(app)
-
-# Configure the SQLAlchemy part of the app instance
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # Ensure this is correct
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configure the upload folder and allowed extensions
 UPLOAD_FOLDER = 'static/uploads'
