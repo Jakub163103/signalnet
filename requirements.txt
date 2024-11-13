@@ -35,7 +35,9 @@ packaging==24.2
 pandas==2.2.3
 pillow==11.0.0
 propcache==0.2.0
+psycopg2-binary==2.9.10
 pycryptodome==3.21.0
+python-binance==1.0.22
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-engineio==4.10.1
