@@ -167,16 +167,4 @@ def fetch_historical_data(client, symbol='BTCUSDT', interval='1m', limit=1000):
 
 # Example usage:
 if __name__ == "__main__":
-    from binance.client import Client
-    
-    # Initialize Binance client with your API credentials
-    binance_client = Client(api_key='your_api_key', api_secret='your_api_secret')
-    
-    # Fetch historical data
-    historical_data = fetch_historical_data(binance_client, symbol='BTCUSDT', interval='1m', limit=1000)
-    
-    # Train the model
-    trained_model = train_model(historical_data)
-    
-    # Save the model
-    save_model(trained_model)
+    pass

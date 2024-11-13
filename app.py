@@ -6,7 +6,6 @@ import os
 from werkzeug.utils import secure_filename
 from PIL import Image
 import random
-from binance.client import Client
 import websocket
 import json
 from threading import Thread
@@ -14,7 +13,6 @@ from utils import send_notification  # Add this import
 from datetime import datetime, timedelta
 from models_.trend_analysis import calculate_moving_averages, generate_signals
 import pandas as pd
-from binance.exceptions import BinanceAPIException
 import stripe
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
@@ -68,9 +66,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure the upload folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# Initialize Binance client
-binance_client = Client(api_key='your_api_key', api_secret='your_api_secret')
 
 # Initialize Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.yourmailserver.com'
@@ -177,11 +172,6 @@ def service_detail(slug):
     # Define the pairs you want to track
     pairs = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT']
     prices = {}
-
-    # Fetch current prices for each pair
-    for pair in pairs:
-        ticker = binance_client.get_symbol_ticker(symbol=pair)
-        prices[pair] = ticker['price']
 
     return render_template('services/quick_signal.html', service=service, pairs=prices)
 
@@ -366,10 +356,8 @@ def quick_signal():
                 user.signals_used += 1
                 db.session.commit()
 
-                from models_.trend_analysis import calculate_moving_averages, generate_signals
-                data = fetch_data_from_binance(symbol)
+                from models_.trend_analysis import calculate_moving_averages
                 data = calculate_moving_averages(data)
-                data = generate_signals(data)
 
                 latest_signal = data.iloc[-1]['position'] if 'position' in data else 'N/A'
                 remaining_time_seconds = (user.last_signal_reset + timedelta(days=1) - datetime.now()).total_seconds()
@@ -391,12 +379,6 @@ def quick_signal():
     flash('You need a subscription to access this feature.', 'warning')
     return redirect(url_for('subscribe'))
 
-def fetch_data_from_binance(symbol, interval='1m', limit=100):
-    """Fetch historical data from Binance."""
-    klines = binance_client.get_klines(symbol=symbol, interval=interval, limit=limit)
-    data = pd.DataFrame(klines, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'number_of_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
-    data['close'] = data['close'].astype(float)
-    return data
 
 def on_message(ws, message):
     data = json.loads(message)
@@ -411,14 +393,6 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
     print("WebSocket connection opened")
 
-def start_websocket(symbol):
-    url = f"wss://fstream.binance.com/ws/{symbol.lower()}@aggTrade"
-    ws = websocket.WebSocketApp(url,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
-    ws.on_open = on_open
-    ws.run_forever()
 
 @app.route('/success')
 def success():
