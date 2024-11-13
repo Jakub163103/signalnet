@@ -4,7 +4,7 @@
 ![Flask Version](https://img.shields.io/badge/Flask-3.0.3-green.svg)
 ![Python Version](https://img.shields.io/badge/Python-3.10+-blue.svg)
 
-## Table of Content
+## Table of Contents
 
 - [Introduction](#introduction)
 - [Features](#features)
@@ -98,18 +98,18 @@
     Create a `.env` file in the root directory and populate it with the following variables:
 
     ```env
-    SECRET_KEY=gfewregDewgwr432423423
+    SECRET_KEY=your_secret_key_here
     SQLALCHEMY_DATABASE_URI=sqlite:///site.db
-    STRIPE_SECRET_KEY=sk_test_51QJFxwIAaVTtgQY4MB3DqYbBGQmC4IwwjLEPxVXzkgjUwCcIsXaF2ix78BXaeyR68PWhqTucsXqtiIMP3Hn6lk2B00j3l6nPyK
-    STRIPE_PUBLIC_KEY=pk_test_51QJFxwIAaVTtgQY4nip1EPXyljQqx7kMajWfFZfBRTvEmpufRv7LWf8C0FgrhfoCVSBbV3j5okoZbOuxOZtKm34c003KlIYDtW
+    STRIPE_SECRET_KEY=your_stripe_secret_key_here
+    STRIPE_PUBLIC_KEY=your_stripe_public_key_here
     MAIL_USERNAME=your_email@example.com
-    MAIL_PASSWORD=your_email_password
-    MAIL_SERVER=smtp.yourmailserver.com
-    MAIL_PORT=587
+    MAIL_PASSWORD=your_email_password_here
+    MAIL_SERVER=your_mail_server_here
+    MAIL_PORT=your_mail_port_here
     MAIL_USE_TLS=True
-    BASIC_PRICE_ID=price_1QJyJbIAaVTtgQY4k8MYqnb1
-    PRO_PRICE_ID=price_1QJyTpIAaVTtgQY4ro473TT3
-    PROFESSIONAL_PRICE_ID=price_1QJyXAIAaVTtgQY4ptwnOTZ6
+    BASIC_PRICE_ID=your_basic_price_id_here
+    PRO_PRICE_ID=your_pro_price_id_here
+    PROFESSIONAL_PRICE_ID=your_professional_price_id_here
     ```
 
     **Note**: Replace the placeholder values with your actual credentials and keys.
