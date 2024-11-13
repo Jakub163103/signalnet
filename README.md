@@ -4,7 +4,7 @@
 ![Flask Version](https://img.shields.io/badge/Flask-3.0.3-green.svg)
 ![Python Version](https://img.shields.io/badge/Python-3.10+-blue.svg)
 
-## Table of Contents
+## Table of Content
 
 - [Introduction](#introduction)
 - [Features](#features)
